@@ -1,0 +1,8 @@
+Código
+Título
+Autor Principal
+Descrição
+Preço Unitário
+Estoque Máximo
+Custo Reposição
+Estoque Atual
