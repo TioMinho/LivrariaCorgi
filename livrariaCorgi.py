@@ -65,8 +65,7 @@ if __name__=="__main__":
 		print("\t3. Adicionar Produtos")
 		print("\t4. Repor Estoque")
 		print("\t5. Status da Loja")
-		print("\t6. Logs")
-		print("\t7. Sair")
+		print("\t6. Sair")
 		print("")
 
 		comando = eval(input("Comando: "))
@@ -77,22 +76,22 @@ if __name__=="__main__":
 			time.sleep(1)	
 			os.system("reset")
 
-			print("###############    Vender Produto    ###############")
-			codigo = input("Digite o código do produto: ")
+			print("###############    Vender Produto    ###############\n")
+			codigo = eval(input("Digite o código do produto: "))
 
-			if(codigo > qtdProdutos): 
+			if(codigo < 0 or codigo > qtdProdutos): 
 				print("Produto Inexistente!")
 			else:
 				titulo, autor, descricao, precoUni, estoqueMax, custoRepo, estoque = getProduto(codigo)
 
-				print("Título:", titulo)
-				print("Autor:", autor)
-				print("Descrição:", descricao)
-				print("Preço:", precoUni)
+				print("Título: R$", titulo)
+				print("Autor: R$", autor)
+				print("Descrição: R$", descricao)
+				print("Preço: R$", precoUni)
 				print("Estoque:", estoque)
 
 				if(estoque > 0):
-					confirma = input("\nConfirmar compra? (S - Sim | N - Não: ")
+					confirma = input("\nConfirmar compra? (S - Sim | N - Não): ")
 					confirma = confirma.lower()
 
 					if(confirma == 's'):
@@ -101,6 +100,7 @@ if __name__=="__main__":
 						estoque = estoque - 1
 
 						setProduto(codigo, titulo, autor, descricao, precoUni, estoqueMax, custoRepo, estoque)
+						print("Compra realizada com sucesso!")
 				else:
 					print("Estoque indisponível para esse produto!")
 
@@ -114,17 +114,17 @@ if __name__=="__main__":
 			while(codigo != 0 and qtdProdutos > 0):
 				time.sleep(1)	
 				os.system("clear")
-				print("###############    Vender Produto    ###############\n")
+				print("###############    Consultar Database    ###############\n")
 				titulo, autor, descricao, precoUni, estoqueMax, custoRepo, estoque = getProduto(codigo)
 
-				print("Codigo:\t", codigo)
-				print("Título:\t", titulo)
-				print("Autor:\t", autor)
-				print("Descrição:\t", descricao)
-				print("Preço:\t", precoUni)
-				print("Estoque Máximo:\t", estoqueMax)
-				print("Custo de Reposição:\t", custoRepo)
-				print("Estoque:\t", estoque)
+				print("Codigo:", codigo)
+				print("Título:", titulo)
+				print("Autor:", autor)
+				print("Descrição:", descricao)
+				print("Preço: R$", precoUni)
+				print("Estoque Máximo: R$", estoqueMax)
+				print("Custo de Reposição: R$", custoRepo)
+				print("Estoque:", estoque)
 
 				acao = input("\n(A - Anterior | P - Próximo | C - Pesquisar por Código | S - Voltar ao Menu): ")
 				acao = acao.lower()
@@ -136,7 +136,7 @@ if __name__=="__main__":
 				elif(acao == 'c'):
 					codigo = eval(input("Digite o Código para Pesquisar: "))
 					
-					if(codigo > qtdProdutos):
+					if(codigo < 1 or codigo > qtdProdutos):
 						print("Código Inválido!")
 						codigo = 1
 
@@ -150,15 +150,15 @@ if __name__=="__main__":
 			time.sleep(1)	
 			os.system("reset")
 
-			print("###############    Adicionar Produto    ###############")
+			print("###############    Adicionar Produto    ###############\n")
 			print("Código:", qtdProdutos + 1)
 
 			titulo 		= input("Título: ")
 			autor 		= input("Autor: ")
 			descricao 	= input("Descrição: ")
-			precoUni 	= input("Preço Unitário: ")
-			estoqueMax 	= input("Máximo de Estoque: ")
-			custoRepo 	= input("Custo de Reposição: ")
+			precoUni 	= input("Preço Unitário: R$")
+			estoqueMax 	= input("Máximo de Estoque: R$")
+			custoRepo 	= input("Custo de Reposição: R$")
 
 			confirm = input("\nAdicionar este produto no Banco de Dados? (S - Sim | N - Não): ")
 			confirm = confirm.lower()
@@ -176,20 +176,59 @@ if __name__=="__main__":
 			time.sleep(1)	
 			os.system("reset")
 
+			print("###############    Repor Estoque    ###############\n")
+			codigo = eval(input("Digite o código do produto: "))
+
+			if(codigo < 0 or codigo > qtdProdutos): 
+				print("Produto Inexistente!")
+			else:
+				titulo, autor, descricao, precoUni, estoqueMax, custoRepo, estoque = getProduto(codigo)
+				custoTotal = custoRepo * (estoqueMax - estoque)
+
+				if(custoTotal == 0):
+					print("Esse produto já está com o estoque cheio!")
+				else:
+					print("\nTítulo:", titulo)
+					print("Autor:", autor)
+					print("Descrição:", descricao)
+					print("Preço: R$", precoUni)
+					
+					print("\nEstoque Máximo:", estoqueMax)
+					print("Estoque Atual:", estoque)
+					print("Valor de Reposição: R$", custoRepo)
+					print("Custo Total da Reposição: R$", custoTotal)
+
+					confirm = input("\nConfirmar reposição? (S - Sim | N - Não): ")
+					confirm = confirm.lower()
+
+					if(confirm == "s"):
+						custoT = custoT + custoTotal
+						receitaT = receitaT - custoTotal
+						estoque = estoqueMax
+
+						setProduto(codigo, titulo, autor, descricao, precoUni, estoqueMax, custoRepo, estoque)
+
+						print("Reposição realizada com sucesso!")
+
+
 		# Opção: Status da Loja
 		elif(comando == 5):
 			print("Aguarde...")
 			time.sleep(1)	
 			os.system("reset")
 
-		# Opção: Logs
-		elif(comando == 6):
-			print("Aguarde...")
-			time.sleep(1)	
-			os.system("reset")
+			print("###############    Status da Loja    ###############\n")
+
+			print("Lucros: R$", lucroT)
+			print("Custos: R$", custoT)
+			print("Receita: R$", receitaT)
+			print("Quantidade de Produtos:", qtdProdutos)
+
+			confirm = input("\n(Digite qualquer coisa para voltar): ")
+
 
 		# Opção: Sair
-		elif(comando == 7):
+		elif(comando == 6):
 			confirm = input("Você tem certeza que deseja sair? (S - Sim | N - Não): ")
 			confirm = confirm.lower()
 
