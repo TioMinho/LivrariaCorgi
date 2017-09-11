@@ -11,6 +11,14 @@ if __name__=="__main__":
 	print("Resgatando os status da livraria...")
 
 	# Carregar os status do arquivo statusLoja.py #
+	file = open("statusLoja.txt", 'r')
+	
+	lucroT 		= int(file.readline())
+	custoT 		= int(file.readline())
+	receitaT 	= int(file.readline())
+	qtdProdutos = int(file.readline())
+	
+	file.close()
 
 	time.sleep(1)
 
@@ -51,6 +59,37 @@ if __name__=="__main__":
 			time.sleep(1)	
 			os.system("reset")
 
+			print("###############    Adicionar Produto    ###############")
+			print("Código:", qtdProdutos + 1)
+
+			titulo 		= input("Título: ")
+			autor 		= input("Autor: ")
+			descricao 	= input("Descrição: ")
+			precoUni 	= input("Preço Unitário: ")
+			estoqueMax 	= input("Máximo de Estoque: ")
+			custoRepo 	= input("Custo de Reposição: ")
+
+			confirm = input("Adicionar este produto no Banco de Dados? (S - Sim | N - Não): ")
+			confirm = confirm.lower()
+			
+			if(confirm == 's'):
+				qtdProdutos = qtdProdutos + 1
+
+				nomeArquivo = 'database/' + str(qtdProdutos)
+				file = open(nomeArquivo, 'w')
+				
+				file.write(str(qtdProdutos) + '\n')
+				file.write(titulo + '\n')		
+				file.write(autor + '\n')
+				file.write(descricao + '\n')
+				file.write(precoUni + '\n')
+				file.write(estoqueMax + '\n')
+				file.write(custoRepo + '\n')
+				file.write('0' + '\n')
+				
+				file.close()
+
+
 		# Opção: Repor Estoque
 		elif(comando == 4):
 			print("Aguarde...")
@@ -81,6 +120,13 @@ if __name__=="__main__":
 				print("")
 				print("Até logo! :)")
 				print("Atualizando statusLoja.txt ...")
+
+				file = open("statusLoja.txt", "w")
+				file.write(str(lucroT) + '\n')
+				file.write(str(custoT) + '\n')
+				file.write(str(receitaT) + '\n')
+				file.write(str(qtdProdutos) + '\n')
+				file.close()
 
 				time.sleep(2)	
 				os.system("reset")
