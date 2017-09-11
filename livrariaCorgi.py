@@ -4,6 +4,38 @@ import os
 
 # -----------
 
+# Funções Auxiliares
+def getProduto(codigo):
+	nomeArquivo = "database/" + str(codigo)
+	file = file.open(nomeArquivo, 'r')
+	
+	titulo 		= file.readline() - '\n'
+	autor 		= file.readline() - '\n'
+	descricao 	= file.readline() - '\n'
+	preco 		= int(file.readline() - '\n')
+	estoqueMax	= int(file.readline() - '\n')
+	custoRepo	= int(file.readline() - '\n')
+	estoque 	= int(file.readline() - '\n')
+
+	file.close()
+
+	return titulo, autor, descricao, preco, estoqueMax, custoRepo, estoque
+
+def setProduto(codigo, titulo, autor, descricao, preco, estoqueMax, custoRepo, estoque):
+	nomeArquivo = 'database/' + str(codigo)
+	file = open(nomeArquivo, 'w')
+	
+	file.write(str(codigo) + '\n')
+	file.write(str(titulo) + '\n')		
+	file.write(str(autor) + '\n')
+	file.write(str(descricao) + '\n')
+	file.write(str(precoUni) + '\n')
+	file.write(str(estoqueMax) + '\n')
+	file.write(str(custoRepo) + '\n')
+	file.write(str(estoque) + '\n')
+	
+	file.close()
+
 # Programa Principal
 if __name__=="__main__":
 	# Parte 1: Carregando os status atuais da loja (ou status iniciais)
@@ -20,10 +52,9 @@ if __name__=="__main__":
 	
 	file.close()
 
-	time.sleep(1)
-
 	# Parte 2: Menu Principal de Comandos
 	while 1:
+		time.sleep(2)
 		os.system("reset")
 		print("####################################################")
 		print("###############    Livraria Corgi    ###############")
@@ -46,6 +77,35 @@ if __name__=="__main__":
 			print("Aguarde...")
 			time.sleep(1)	
 			os.system("reset")
+
+			print("###############    Vender Produto    ###############")
+			codigo = input("Digite o código do produto: ")
+
+			if(codigo > qtdProdutos): 
+				print("Produto Inexistente!")
+			else:
+				titulo, autor, descricao, precoUni, estoqueMax, custoRepo, estoque = getProduto(codigo)
+
+				print("Título:", titulo)
+				print("Autor:", autor)
+				print("Descrição:", descricao)
+				print("Preço:", precoUni)
+				print("Estoque:", estoque)
+
+				if(estoque > 0):
+					confirma = input("Confirmar compra? (S - Sim | N - Não: ")
+					confirma = confirma.lower()
+
+					if(confirma = 's'):
+						receitaT = receitaT + precoUni
+						lucroT = lucroT + precoUni
+						estoque = estoque - 1
+
+						setProduto(codigo, titulo, autor, descricao, precoUni, estoqueMax, custoRepo, estoque)
+				else:
+					print("Estoque indisponível para esse produto!")
+
+
 
 		# Opção: Consultar Database
 		elif(comando == 2):
@@ -75,20 +135,9 @@ if __name__=="__main__":
 			if(confirm == 's'):
 				qtdProdutos = qtdProdutos + 1
 
-				nomeArquivo = 'database/' + str(qtdProdutos)
-				file = open(nomeArquivo, 'w')
-				
-				file.write(str(qtdProdutos) + '\n')
-				file.write(titulo + '\n')		
-				file.write(autor + '\n')
-				file.write(descricao + '\n')
-				file.write(precoUni + '\n')
-				file.write(estoqueMax + '\n')
-				file.write(custoRepo + '\n')
-				file.write('0' + '\n')
-				
-				file.close()
+				setProduto(qtdProdutos, titulo, autor, descricao, precoUni, estoqueMax, custoRepo)
 
+				print("O produto foi adicionado no Banco de Dados com sucesso!")
 
 		# Opção: Repor Estoque
 		elif(comando == 4):
